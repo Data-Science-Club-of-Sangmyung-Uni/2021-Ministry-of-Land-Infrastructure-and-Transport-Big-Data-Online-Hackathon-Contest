@@ -1,0 +1,235 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "vaccinated Info.ipynb",
+      "provenance": [],
+      "collapsed_sections": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "3apAMbtct2Iu"
+      },
+      "source": [
+        "import requests #http에 요청을 보낼 때 사용\n",
+        "from bs4 import BeautifulSoup as bs#html정보를 filtering하기 위해 사용"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "GPxsWEaFuIuH"
+      },
+      "source": [
+        "vaccinInfo_Url = \"https://ncv.kdca.go.kr/mainStatus.es?mid=a11702000000\"\n",
+        "checkResponse = requests.get(vaccinInfo_Url)\n",
+        "htmlInfo = bs(checkResponse.content, \"html.parser\")\n",
+        "#htmlInfo"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1EXz_oKovD_1",
+        "outputId": "580961fc-ff17-44d6-b2a4-4c92e12b32c6"
+      },
+      "source": [
+        "vaccinInfo = htmlInfo.find_all(\"td\", class_=\"ta_r\") #1회차 접종:[당일실적, 당일 누계], 2회차 접종:[당일실적, 당일 누계]\n",
+        "print(vaccinInfo)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "[<td class=\"ta_r\">74,786</td>, <td class=\"ta_r\">3,374,265</td>, <td class=\"ta_r\">9,381</td>, <td class=\"ta_r\">1,294,060</td>, <td class=\"ta_r\">22,619</td>, <td class=\"ta_r\">1,252,726</td>, <td class=\"ta_r\">3,756</td>, <td class=\"ta_r\">464,911</td>, <td class=\"ta_r\">16,201</td>, <td class=\"ta_r\">770,963</td>, <td class=\"ta_r\">3,338</td>, <td class=\"ta_r\">298,176</td>, <td class=\"ta_r\">22,026</td>, <td class=\"ta_r\">940,010</td>, <td class=\"ta_r\">2,075</td>, <td class=\"ta_r\">353,078</td>, <td class=\"ta_r\">9,642</td>, <td class=\"ta_r\">496,506</td>, <td class=\"ta_r\">1,020</td>, <td class=\"ta_r\">201,182</td>, <td class=\"ta_r\">10,520</td>, <td class=\"ta_r\">476,909</td>, <td class=\"ta_r\">1,577</td>, <td class=\"ta_r\">190,810</td>, <td class=\"ta_r\">12,395</td>, <td class=\"ta_r\">351,105</td>, <td class=\"ta_r\">874</td>, <td class=\"ta_r\">122,518</td>, <td class=\"ta_r\">2,544</td>, <td class=\"ta_r\">95,668</td>, <td class=\"ta_r\">230</td>, <td class=\"ta_r\">36,335</td>, <td class=\"ta_r\">104,771</td>, <td class=\"ta_r\">4,224,856</td>, <td class=\"ta_r\">8,921</td>, <td class=\"ta_r\">1,593,485</td>, <td class=\"ta_r\">10,085</td>, <td class=\"ta_r\">624,878</td>, <td class=\"ta_r\">1,400</td>, <td class=\"ta_r\">268,361</td>, <td class=\"ta_r\">10,640</td>, <td class=\"ta_r\">590,479</td>, <td class=\"ta_r\">1,403</td>, <td class=\"ta_r\">236,021</td>, <td class=\"ta_r\">15,623</td>, <td class=\"ta_r\">784,424</td>, <td class=\"ta_r\">1,531</td>, <td class=\"ta_r\">322,262</td>, <td class=\"ta_r\">12,368</td>, <td class=\"ta_r\">733,550</td>, <td class=\"ta_r\">1,451</td>, <td class=\"ta_r\">306,877</td>, <td class=\"ta_r\">12,458</td>, <td class=\"ta_r\">807,699</td>, <td class=\"ta_r\">1,410</td>, <td class=\"ta_r\">338,983</td>, <td class=\"ta_r\">17,386</td>, <td class=\"ta_r\">995,094</td>, <td class=\"ta_r\">3,205</td>, <td class=\"ta_r\">401,035</td>, <td class=\"ta_r\">21,722</td>, <td class=\"ta_r\">1,152,924</td>, <td class=\"ta_r\">2,639</td>, <td class=\"ta_r\">454,016</td>, <td class=\"ta_r\">4,970</td>, <td class=\"ta_r\">230,882</td>, <td class=\"ta_r\">369</td>, <td class=\"ta_r\">90,560</td>]\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ajN4bcyi0R9A",
+        "outputId": "2537fd1d-3be4-4324-95cc-579633a5f595"
+      },
+      "source": [
+        "cityInfo = htmlInfo.find_all(\"th\", scope=\"row\")\n",
+        "print(cityInfo)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "[<th scope=\"row\">당일 누적<span class=\"r_txt_descript clr_1\">A</span> + <span class=\"r_txt_descript clr_2\">B</span></th>, <th scope=\"row\">당일 실적<span class=\"r_txt_descript clr_1\">A</span></th>, <th scope=\"row\">전일 누적<span class=\"r_txt_descript clr_2\">B</span></th>, <th scope=\"row\">합계</th>, <th scope=\"row\">서울</th>, <th scope=\"row\">부산</th>, <th scope=\"row\">대구</th>, <th scope=\"row\">인천</th>, <th scope=\"row\">광주</th>, <th scope=\"row\">대전</th>, <th scope=\"row\">울산</th>, <th scope=\"row\">세종</th>, <th scope=\"row\">경기</th>, <th scope=\"row\">강원</th>, <th scope=\"row\">충북</th>, <th scope=\"row\">충남</th>, <th scope=\"row\">전북</th>, <th scope=\"row\">전남</th>, <th scope=\"row\">경북</th>, <th scope=\"row\">경남</th>, <th scope=\"row\">제주</th>]\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "R2kOHx3r-QCt",
+        "outputId": "37744fa4-af0e-4d37-ec56-2b5eb6a476be"
+      },
+      "source": [
+        "valueInfo = [eachLine.get_text().rstrip() for eachLine in vaccinInfo]\n",
+        "temp = list()\n",
+        "idx = -1\n",
+        "for i, value in enumerate(valueInfo):\n",
+        "  if i % 4 == 0: #4개 단위로 끊기 위해 %연산 사용 (1회차, 2회차)\n",
+        "    temp.append([])\n",
+        "    idx += 1\n",
+        "  temp[idx].append(value)\n",
+        "\n",
+        "temp"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[['74,786', '3,374,265', '9,381', '1,294,060'],\n",
+              " ['22,619', '1,252,726', '3,756', '464,911'],\n",
+              " ['16,201', '770,963', '3,338', '298,176'],\n",
+              " ['22,026', '940,010', '2,075', '353,078'],\n",
+              " ['9,642', '496,506', '1,020', '201,182'],\n",
+              " ['10,520', '476,909', '1,577', '190,810'],\n",
+              " ['12,395', '351,105', '874', '122,518'],\n",
+              " ['2,544', '95,668', '230', '36,335'],\n",
+              " ['104,771', '4,224,856', '8,921', '1,593,485'],\n",
+              " ['10,085', '624,878', '1,400', '268,361'],\n",
+              " ['10,640', '590,479', '1,403', '236,021'],\n",
+              " ['15,623', '784,424', '1,531', '322,262'],\n",
+              " ['12,368', '733,550', '1,451', '306,877'],\n",
+              " ['12,458', '807,699', '1,410', '338,983'],\n",
+              " ['17,386', '995,094', '3,205', '401,035'],\n",
+              " ['21,722', '1,152,924', '2,639', '454,016'],\n",
+              " ['4,970', '230,882', '369', '90,560']]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 5
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "j5y3qB5V-bNZ",
+        "outputId": "f1059f2f-8312-43c1-d0e2-ef2720257a93"
+      },
+      "source": [
+        "cityInfo = [eachLine.get_text().rstrip() for eachLine in cityInfo]\n",
+        "cityInfo = cityInfo[4:]\n",
+        "cityInfo"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['서울',\n",
+              " '부산',\n",
+              " '대구',\n",
+              " '인천',\n",
+              " '광주',\n",
+              " '대전',\n",
+              " '울산',\n",
+              " '세종',\n",
+              " '경기',\n",
+              " '강원',\n",
+              " '충북',\n",
+              " '충남',\n",
+              " '전북',\n",
+              " '전남',\n",
+              " '경북',\n",
+              " '경남',\n",
+              " '제주']"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "JbyKPRA-_MVy",
+        "outputId": "864968af-dd91-4a00-bc49-fa3ad6fcef7c"
+      },
+      "source": [
+        "allResult = dict()\n",
+        "\n",
+        "for city, value in zip(cityInfo, temp):\n",
+        "  allResult[city] = value\n",
+        "  \n",
+        "print(allResult)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "{'서울': ['74,786', '3,374,265', '9,381', '1,294,060'], '부산': ['22,619', '1,252,726', '3,756', '464,911'], '대구': ['16,201', '770,963', '3,338', '298,176'], '인천': ['22,026', '940,010', '2,075', '353,078'], '광주': ['9,642', '496,506', '1,020', '201,182'], '대전': ['10,520', '476,909', '1,577', '190,810'], '울산': ['12,395', '351,105', '874', '122,518'], '세종': ['2,544', '95,668', '230', '36,335'], '경기': ['104,771', '4,224,856', '8,921', '1,593,485'], '강원': ['10,085', '624,878', '1,400', '268,361'], '충북': ['10,640', '590,479', '1,403', '236,021'], '충남': ['15,623', '784,424', '1,531', '322,262'], '전북': ['12,368', '733,550', '1,451', '306,877'], '전남': ['12,458', '807,699', '1,410', '338,983'], '경북': ['17,386', '995,094', '3,205', '401,035'], '경남': ['21,722', '1,152,924', '2,639', '454,016'], '제주': ['4,970', '230,882', '369', '90,560']}\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "VC3yHXk2_uyy"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "column_names = [\"1회차 접종 당일 실적\", \"1회차 접종 당일 누계\", \"2회차 접종 당일 실적\", \"2회차 접종 당일 누계\"]\n",
+        "df = pd.DataFrame.from_dict(allResult, orient=\"index\", columns=column_names)\n",
+        "df.to_csv(\"vaccin.csv\")"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
